@@ -15,7 +15,7 @@ const Header = () => {
         </Link>
 
         {/* Navigation (hidden on mobile) */}
-        <nav className="hidden sm:flex">
+        <nav className="hidden sm:flex ">
           <ul className="flex space-x-6 items-center text-gray-700 font-medium">
             <li>
               <Link to="/" className="hover:text-blue-600 transition duration-300">

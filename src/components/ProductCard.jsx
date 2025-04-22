@@ -36,8 +36,8 @@ const ProductCard = ({ product }) => {
         </h3>
 
         <div className="flex items-center gap-2">
-          <span className="text-blue-600 font-bold text-lg">
-            ${product.price}
+          <span className="text-black  text-lg">
+            <span className="text-blue-600">$</span>{product.price}
           </span>
           {product.original_price && (
             <span className="text-sm text-gray-400 line-through">
