@@ -1,13 +1,13 @@
 import React from "react";
 import { FiPlus, FiMinus, FiTrash2 } from "react-icons/fi";
 import { useDispatch } from "react-redux";
-// import { updateQuantity, removeFromCart } from "../app/cartSlice";
+import { updateQuantity, removeFromCart } from "../app/cartSlice";
 
 const Cart = ({ item }) => {
   const dispatch = useDispatch();
 
   const handleIncrease = () => {
-    dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }));
+    dispatch(updateQuantity({ item }));
   };
 
   const handleDecrease = () => {
