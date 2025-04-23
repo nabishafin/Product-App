@@ -1,48 +1,52 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import Loader from "../components/Loader";
 import Header from "../components/Header";
-import OrderModal from "../components/OrderModal";
 import { useProducts } from "../hooks/useProducts";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../app/cartSlice";
 import toast from "react-hot-toast";
 
 const ProductDetail = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-
-  const handleAddToCart = () => {
-    dispatch(addToCart(product));
-    toast.success("Item added to cart!");
-    navigate('/cartpage')
-  };
-
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   const { id } = useParams();
   const { data, loading, error } = useProducts();
-  // const [showOrderModal, setShowOrderModal] = useState(false);
 
   const product = data?.data?.data?.find((item) => item?.id === parseInt(id));
   const imageUrl = `https://admin.refabry.com/storage/product/${product?.image}`;
 
-  // const handlePlaceOrder = async (orderData) => {
-  //   try {
-  //     await axios.post(
-  //       "https://admin.refabry.com/api/public/order/create",
-  //       orderData
-  //     );
-  //     alert("Order placed successfully!");
-  //     setShowOrderModal(false);
-  //   } catch (error) {
-  //     alert("Failed to place order. Please try again.");
-  //   }
-  // };
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+
+    if (!selectedColor) {
+      toast.error("Please select a color");
+      return;
+    }
+
+    const cartItem = {
+      ...product,
+      selectedSize,
+      selectedColor,
+      quantity
+    };
+
+    dispatch(addToCart(cartItem));
+    toast.success("Item added to cart!");
+    navigate("/cartpage");
+  };
+
+  const incrementQuantity = () => setQuantity(prev => prev + 1);
+  const decrementQuantity = () => quantity > 1 && setQuantity(prev => prev - 1);
 
   if (loading) return <Loader />;
-
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -53,12 +57,43 @@ const ProductDetail = () => {
     );
   }
 
+  const sizes = product?.variation_combinations?.find(v => v.size)
+    ? product.variation_combinations.map(v => v.size).filter(Boolean)
+    : ['M(28-30)', 'L(32-34)', 'XL(36-38)', 'ZXL(38-42)'];
+
+  const specifications = product?.specifications
+    ? product.specifications.split("\n").filter(item => item.trim() !== "")
+    : [
+      "Made of 100% Cotton",
+      "Covered 100% Cotton waistband (knit fabric)",
+      "Drawstring for an adjustable fit",
+      "Convenient side seam pockets",
+      "An extra layer of Gray Melange on top of the waistband.",
+      "Soft material for comfort",
+      "Durable tightly coupled stitches",
+      "Locked open-ended wholes for durability",
+      "Fabric type: Plain fabric",
+      "G.S.M.: 110-125",
+      "Yarn count: 40/40"
+    ];
+
+  const sizeChart = {
+    measurements: ["Half-Thigh (inch)", "Length (inch)"],
+    sizes: ["M", "L", "XL", "ZXL"],
+    values: [
+      ["12.0", "12.4", "12.8", "12.6"],
+      ["37", "38", "39", "40"]
+    ]
+  };
+
+  const colors = ["Red", "Blue", "Black", "Gray", "White"];
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-md overflow-hidden md:flex md:gap-6 p-6 h-full">
-          {/* Left Section: Image Carousel */}
+          {/* Left Section: Image */}
           <div className="md:w-1/2 flex flex-col h-full">
             <div className="flex-grow flex items-center justify-center bg-gray-50 rounded-lg mb-4 overflow-hidden">
               <img
@@ -66,102 +101,173 @@ const ProductDetail = () => {
                 alt={product?.name}
                 className="max-h-[800px] w-full object-contain"
                 onError={(e) => {
-                  e.target.src =
-                    "https://via.placeholder.com/600x600?text=No+Image";
+                  e.target.src = "https://via.placeholder.com/600x600?text=No+Image";
                 }}
               />
             </div>
-
-
           </div>
 
           {/* Right Section: Product Details */}
           <div className="md:w-1/2 flex flex-col h-full">
             <div className="flex-grow overflow-y-auto pr-2">
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">{product?.name}</h1>
+              {product?.discount_amount && (
+                <div className="text-red-600 font-bold text-lg mb-2">SALE</div>
+              )}
 
-              <div className="flex items-center gap-3 mb-4 flex-wrap">
-                <span className="text-2xl font-bold text-blue-600">${product?.price}</span>
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                {product?.name || "Mens Premium Trouser"}
+              </h1>
+
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl font-bold text-blue-600">
+                  ${product?.price || "99.00"}
+                </span>
                 {product?.discount_amount && (
-                  <span className="bg-red-100 text-red-600 text-sm px-2 py-1 rounded">
-                    -${product?.discount_amount}
+                  <span className="text-lg text-gray-500 line-through">
+                    ${(parseFloat(product.price) + parseFloat(product.discount_amount)).toFixed(2)}
                   </span>
                 )}
-                {product?.buying_price && (
-                  <span className="text-sm text-gray-500">Buying Price: ${product.buying_price}</span>
+              </div>
+
+              {/* Size Selection */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Select Size</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-2">
+                  {sizes.map((size) => (
+                    <button
+                      key={size}
+                      className={`border py-2 px-4 rounded font-bold w-full ${selectedSize === size
+                        ? "border-blue-600 bg-blue-50 text-blue-600"
+                        : "border-gray-300"
+                        }`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+                {selectedSize && (
+                  <div className="mt-2">
+                    <span className="inline-block bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-300 shadow">
+                      Selected Size: {selectedSize}
+                    </span>
+                  </div>
                 )}
               </div>
 
-              {/* Metadata */}
-              <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-6 p-3 bg-gray-50 rounded-lg">
-                <div><strong>Category:</strong> {product?.category?.name || "N/A"}</div>
-                <div><strong>Code:</strong> {product?.code || "N/A"}</div>
-                <div><strong>Stock:</strong> {product?.stock || "N/A"}</div>
-                <div><strong>Published:</strong> {product?.is_published ? "Yes" : "No"}</div>
-                {product?.discount_date && <div><strong>Discount Date:</strong> {product.discount_date}</div>}
-                <div><strong>Pre Order:</strong> {product?.pre_order || "N/A"}</div>
+              {/* Color Selection */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Select Color</h3>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {colors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setSelectedColor(color)}
+                      className={`px-4 py-2 rounded border font-semibold capitalize transition-colors duration-200 ${selectedColor === color
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-gray-700 border-gray-300 hover:border-blue-400"
+                        }`}
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
+                {selectedColor && (
+                  <div className="mt-2">
+                    <span className="inline-block bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-300 shadow">
+                      Selected Color: {selectedColor}
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {/* Short Description */}
-              {product?.short_desc && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Highlights</h3>
-                  <div className="whitespace-pre-line text-gray-700 bg-gray-50 p-3 rounded-md border">
-                    {product.short_desc}
-                  </div>
+              {/* Quantity & Add to Cart */}
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center border border-gray-300 rounded">
+                  <button
+                    className="px-3 py-1 font-bold text-xl"
+                    onClick={decrementQuantity}
+                  >
+                    -
+                  </button>
+                  <span className="px-3 py-1 font-bold">{quantity}</span>
+                  <button
+                    className="px-3 py-1 font-bold text-xl"
+                    onClick={incrementQuantity}
+                  >
+                    +
+                  </button>
                 </div>
-              )}
+                <button
+                  className="bg-gray-800 text-white  px-4 py-[6px]  hover:bg-gray-900 transition border-t border-cyan-40"
+                  onClick={handleAddToCart}
+                >
+                  + Add To Cart
+                </button>
+              </div>
 
-              {/* Specifications */}
-              {product?.specifications && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Specifications</h3>
-                  <ul className="list-disc list-inside text-gray-600 space-y-1">
-                    {product.specifications.split("\n").map((spec, idx) => (
-                      <li key={idx}>{spec}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <div className="border-t border-gray-200 my-4"></div>
 
-              {/* Variations */}
-              {product?.variation_combinations?.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Available Variations</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {product.variation_combinations.map((combo, idx) => (
-                      <div key={idx} className="bg-gray-100 px-3 py-1 rounded-full text-sm">
-                        {Object.entries(combo).map(([key, value]) => (
-                          <span key={key}>{key}: {value}</span>
+              {/* Detailed Description */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Detailed Description</h3>
+                <ul className="list-disc list-inside text-gray-600 space-y-1">
+                  {specifications.map((spec, index) => (
+                    <li key={index}>{spec}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-t border-gray-200 my-4"></div>
+
+              {/* Size Chart */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  Size chart - In Inches (Expected Deviation &lt; 3%)
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-white border-collapse text-sm">
+                    <thead>
+                      <tr>
+                        <th className="py-2 px-4 border border-gray-200"></th>
+                        <th className="py-2 px-4 border border-gray-200">Size</th>
+                        {sizeChart.sizes.map((size, index) => (
+                          <th
+                            key={size}
+                            className={`py-2 px-4 border border-gray-200 ${index > 1 ? 'hidden md:table-cell' : ''
+                              }`}
+                          >
+                            {size}
+                          </th>
                         ))}
-                      </div>
-                    ))}
-                  </div>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sizeChart.measurements.map((measurement, i) => (
+                        <tr key={measurement}>
+                          <td className="py-2 px-4 border border-gray-200">{measurement}</td>
+                          <td className="py-2 px-4 border border-gray-200"></td>
+                          {sizeChart.values[i].map((value, j) => (
+                            <td
+                              key={`${i}-${j}`}
+                              className={`py-2 px-4 border border-gray-200 ${j > 1 ? 'hidden md:table-cell' : ''
+                                }`}
+                            >
+                              {value}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              )}
-            </div>
+              </div>
 
-            {/* CTA Button - Sticky at the bottom */}
-            <div className="mt-4 pt-4 border-t">
-              <button
-                onClick={() => handleAddToCart()}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium shadow hover:shadow-lg transition duration-300"
-              >
-                Add To Cart
-              </button>
+
             </div>
           </div>
         </div>
       </main>
-
-      {/* Order Modal */}
-      {/* {showOrderModal && (
-        <OrderModal
-          product={product}
-          onClose={() => setShowOrderModal(false)}
-          onSubmit={handlePlaceOrder}
-        />
-      )} */}
     </div>
   );
 };

@@ -7,6 +7,7 @@ import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 import CardPage from "./components/CardPage";
 import { Toaster } from "react-hot-toast"; // make sure you import this
+import Checkout from "./pages/checkout";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/cartpage" element={<CardPage />} />
+          <Route path="/cart" element={<CardPage />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

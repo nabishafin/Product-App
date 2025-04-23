@@ -37,12 +37,12 @@ const Header = () => {
 
         {/* Cart Icon */}
         <Link
-          to="/cartpage"
+          to="/cart"
           className="relative hover:text-blue-600 transition duration-300 ml-4 sm:ml-0"
         >
           <FiShoppingCart className="text-2xl" />
           {cartItems?.length > 0 && (
-            <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
+            <span className="absolute -top-2 -right-3 bg-blue-700 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
               {cartItems.length}
             </span>
           )}

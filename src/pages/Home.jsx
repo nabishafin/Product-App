@@ -1,17 +1,18 @@
-import React, { useEffect } from "react";
-// import { useFetchProducts } from "../hooks/useFetchProducts";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setProducts } from "../app/productSlice";
+import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
 import Loader from "../components/Loader";
 import Header from "../components/Header";
 
-import { useProducts } from "../hooks/useProducts";
-import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "../app/productSlice";
-
 const Home = () => {
+  const dispatch = useDispatch();
   const { items: products } = useSelector((state) => state.products);
   const { data, loading, error } = useProducts();
-  const dispatch = useDispatch();
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
 
   useEffect(() => {
     if (data?.status) {
@@ -19,9 +20,21 @@ const Home = () => {
     }
   }, [data, dispatch]);
 
-  if (loading) {
-    return <Loader />;
-  }
+  const filteredProducts = products
+    ?.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    ?.sort((a, b) => {
+      if (sortOrder === "lowToHigh") {
+        return a.price - b.price;
+      } else if (sortOrder === "highToLow") {
+        return b.price - a.price;
+      } else {
+        return 0;
+      }
+    });
+
+  if (loading) return <Loader />;
 
   if (error) {
     return (
@@ -35,29 +48,33 @@ const Home = () => {
     <div className="min-h-screen bg-gray-50">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Our Products</h1>
-        {
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products?.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        }
+        <div className="flex flex-col md:flex-row justify-between gap-4 items-center mb-8">
+          <input
+            type="text"
+            placeholder="Search by Name"
+            className="input input-bordered w-full md:w-1/2"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <select
+            className="select select-bordered w-full md:w-48"
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="">Sort by Price</option>
+            <option value="lowToHigh">Price: Low to High</option>
+            <option value="highToLow">Price: High to Low</option>
+          </select>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {filteredProducts?.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </main>
     </div>
   );
 };
 
 export default Home;
-
-{
-  /* {loading ? (
-                    <Loader />
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {products.map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
-                    </div>
-  )} */
-}
