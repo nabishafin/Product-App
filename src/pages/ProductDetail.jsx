@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
 import Header from "../components/Header";
@@ -7,14 +7,17 @@ import OrderModal from "../components/OrderModal";
 import { useProducts } from "../hooks/useProducts";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../app/cartSlice";
+import toast from "react-hot-toast";
 
 const ProductDetail = () => {
-
+  const navigate = useNavigate()
   const dispatch = useDispatch();
 
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
+    toast.success("Item added to cart!");
+    navigate('/cartpage')
   };
 
 
