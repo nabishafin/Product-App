@@ -81,16 +81,16 @@ const CartPage = () => {
 
               <div className="mt-6 space-y-4">
                 <div>
-                  <Link to={'/checkout'}>
+                  {/* <Link to={'/checkout'}>
                     <button className="bg-gray-800 text-white px-4 py-[6px] w-full hover:bg-gray-900 transition border-t border-cyan-400">
                       Place Order
                     </button>
-                  </Link>
+                  </Link> */}
                 </div>
                 <div>
-                  <Link to={'/'}>
-                    <button className="bg-green-600 text-white px-4 py-[6px] w-full hover:bg-green-700 transition border-t border-cyan-400">
-                      Continue Shopping
+                  <Link to={'/checkout'}>
+                    <button className="bg-gray-800 text-white px-4 py-[6px] w-full hover:bg-gray-900 transition border-t border-cyan-400">
+                      Place Order
                     </button>
                   </Link>
                 </div>

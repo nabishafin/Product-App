@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { FaMinus, FaPlus } from "react-icons/fa";
 const Cart = ({ item, handleDecrease, handleRemove, handleIncrease }) => {
     const { id } = item;
 
@@ -11,7 +11,7 @@ const Cart = ({ item, handleDecrease, handleRemove, handleIncrease }) => {
                         <th className="text-left py-3 px-4 font-semibold">Product</th>
                         <th className="text-left py-3 px-4 font-semibold">User Price</th>
                         <th className="text-left py-3 px-4 font-semibold hidden sm:table-cell">Size</th>
-                        <th className="text-left py-3 px-4 font-semibold">Quantity</th>
+                        <th className="text-left py-3 px-4 font-semibold ml-4">Quantity</th>
                         <th className="text-left py-3 px-4 font-semibold hidden sm:table-cell">Selected</th>
                         <th className="text-left py-3 px-4 font-semibold">Action</th>
                     </tr>
@@ -34,21 +34,21 @@ const Cart = ({ item, handleDecrease, handleRemove, handleIncrease }) => {
                         <td className="py-4 px-4 block sm:table-cell">৳{(item.price * item.quantity).toFixed(2)}</td>
                         <td className="py-4 px-4 hidden sm:table-cell">{item.selectedSize || "N/A"}</td>
                         <td className="py-4 px-4 block sm:table-cell">
-                            <div className="flex flex-col sm:flex-row items-center justify-start gap-2">
+                            <div className="flex flex-col sm:flex-row items-center justify-start  gap-2">
                                 <button
                                     onClick={() => handleDecrease(item)}
-                                    className="text-4xl "
+                                    className=" "
                                 >
-                                    -
+                                    <FaMinus />
                                 </button>
-                                <span className="text-center w-full sm:w-12 border border-gray-300 py-2 rounded mx-2">
+                                <span className="text-center w-full sm:w-12 border border-gray-300 py-2 rounded ">
                                     {item.quantity}
                                 </span>
                                 <button
                                     onClick={() => handleIncrease(item)}
-                                    className="text-2xl "
+                                    className=" "
                                 >
-                                    +
+                                    <FaPlus />
                                 </button>
                             </div>
                         </td>
