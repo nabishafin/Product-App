@@ -3,6 +3,9 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../app/cartSlice";
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+
+
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -10,6 +13,7 @@ const ProductCard = ({ product }) => {
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
+    toast.success("Order Placed Successfully!");
   };
 
 
