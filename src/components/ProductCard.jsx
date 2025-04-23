@@ -12,23 +12,13 @@ const ProductCard = ({ product }) => {
     dispatch(addToCart(product));
   };
 
-  const discountPercentage = 0.1; // 10% discount
-  const discountedPrice = product.price * (1 - discountPercentage);
-  const discountAmount = product.original_price
-    ? product.original_price - discountedPrice
-    : 0;
+
 
   return (
     <Link
       to={`/product/${product.id}`}
-      className="relative border border-blue-100 shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col"
+      className="relative border border-blue-100 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col"
     >
-      {/* SALE Badge */}
-      {discountAmount > 0 && (
-        <div className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 z-10">
-          SALE
-        </div>
-      )}
 
       {/* Product Image */}
       <div className="bg-gray-100 h-64 flex justify-center items-center">
@@ -47,9 +37,9 @@ const ProductCard = ({ product }) => {
         <div className="p-4 text-center space-y-2">
           <h3 className="text-md font-semibold text-gray-700">{product.name}</h3>
           <div className="flex flex-col justify-center items-center gap-1 text-sm">
-            <span className="bg-black py-[2px] px-3 text-white text-sm">save 10%</span>
-            <span className="text-red-500 line-through">৳{product.price}</span>
-            <span className="text-black px-4 py-[1px]">৳{discountedPrice.toFixed(2)}</span>
+
+
+            <span className="text-black px-4 py-[1px]">৳{product.price}</span>
           </div>
         </div>
 

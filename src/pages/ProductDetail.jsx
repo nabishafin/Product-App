@@ -21,11 +21,12 @@ const ProductDetail = () => {
   const imageUrl = `https://admin.refabry.com/storage/product/${product?.image}`;
 
   const handleAddToCart = () => {
+
+
     if (!selectedSize) {
       toast.error("Please select a size");
       return;
     }
-
     if (!selectedColor) {
       toast.error("Please select a color");
       return;
@@ -40,7 +41,7 @@ const ProductDetail = () => {
 
     dispatch(addToCart(cartItem));
     toast.success("Item added to cart!");
-    navigate("/cartpage");
+    navigate("/cart");
   };
 
   const incrementQuantity = () => setQuantity(prev => prev + 1);
@@ -110,9 +111,6 @@ const ProductDetail = () => {
           {/* Right Section: Product Details */}
           <div className="md:w-1/2 flex flex-col h-full">
             <div className="flex-grow overflow-y-auto pr-2">
-              {product?.discount_amount && (
-                <div className="text-red-600 font-bold text-lg mb-2">SALE</div>
-              )}
 
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
                 {product?.name || "Mens Premium Trouser"}
@@ -122,11 +120,6 @@ const ProductDetail = () => {
                 <span className="text-2xl font-bold text-blue-600">
                   ${product?.price || "99.00"}
                 </span>
-                {product?.discount_amount && (
-                  <span className="text-lg text-gray-500 line-through">
-                    ${(parseFloat(product.price) + parseFloat(product.discount_amount)).toFixed(2)}
-                  </span>
-                )}
               </div>
 
               {/* Size Selection */}
@@ -148,8 +141,8 @@ const ProductDetail = () => {
                 </div>
                 {selectedSize && (
                   <div className="mt-2">
-                    <span className="inline-block bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-300 shadow">
-                      Selected Size: {selectedSize}
+                    <span className="inline-block bg-blue-50 text-blue-600 font-semibold py-2 px-4 rounded-lg border border-blue-600 shadow">
+                      {selectedSize}
                     </span>
                   </div>
                 )}
@@ -163,9 +156,9 @@ const ProductDetail = () => {
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`px-4 py-2 rounded border font-semibold capitalize transition-colors duration-200 ${selectedColor === color
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white text-gray-700 border-gray-300 hover:border-blue-400"
+                      className={`border py-2 px-4 rounded font-bold  ${selectedColor === color
+                        ? "border-blue-600 bg-blue-50 text-blue-600"
+                        : "border-gray-300"
                         }`}
                     >
                       {color}
@@ -174,7 +167,7 @@ const ProductDetail = () => {
                 </div>
                 {selectedColor && (
                   <div className="mt-2">
-                    <span className="inline-block bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-300 shadow">
+                    <span className="inline-block bg-blue-50 text-blue-600 font-semibold py-2 px-4 rounded-lg border border-blue-600 shadow">
                       Selected Color: {selectedColor}
                     </span>
                   </div>
@@ -211,57 +204,14 @@ const ProductDetail = () => {
               {/* Detailed Description */}
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Detailed Description</h3>
-                <ul className="list-disc list-inside text-gray-600 space-y-1">
-                  {specifications.map((spec, index) => (
-                    <li key={index}>{spec}</li>
-                  ))}
-                </ul>
+
+                <div key={product?.id} className="whitespace-pre-line">
+                  {product?.short_desc}
+                </div>
+
               </div>
 
               <div className="border-t border-gray-200 my-4"></div>
-
-              {/* Size Chart */}
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                  Size chart - In Inches (Expected Deviation &lt; 3%)
-                </h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full bg-white border-collapse text-sm">
-                    <thead>
-                      <tr>
-                        <th className="py-2 px-4 border border-gray-200"></th>
-                        <th className="py-2 px-4 border border-gray-200">Size</th>
-                        {sizeChart.sizes.map((size, index) => (
-                          <th
-                            key={size}
-                            className={`py-2 px-4 border border-gray-200 ${index > 1 ? 'hidden md:table-cell' : ''
-                              }`}
-                          >
-                            {size}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sizeChart.measurements.map((measurement, i) => (
-                        <tr key={measurement}>
-                          <td className="py-2 px-4 border border-gray-200">{measurement}</td>
-                          <td className="py-2 px-4 border border-gray-200"></td>
-                          {sizeChart.values[i].map((value, j) => (
-                            <td
-                              key={`${i}-${j}`}
-                              className={`py-2 px-4 border border-gray-200 ${j > 1 ? 'hidden md:table-cell' : ''
-                                }`}
-                            >
-                              {value}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
 
 
             </div>
