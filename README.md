@@ -1,5 +1,6 @@
 This is a responsive product showcase web application built with **React.js**, **Redux Toolkit**, **Axios**, and **Tailwind CSS**. The app fetches product data from a given API and displays it in a user-friendly layout. It includes optional functionality for placing orders.
 
+## Live site: https://inspiring-biscotti-12666d.netlify.app/
 ## 🔧 Tech Stack
 
 - React.js
