@@ -10,7 +10,7 @@ import { Toaster } from "react-hot-toast";
 import Header from "./components/Header";
 import React, { useEffect } from "react";
 
-import CheckoutPage from "./pages/checkout";
+import CheckoutPage from "./pages/Checkout";
 
 function App() {
   const { cartItems } = useSelector((state) => state.cart);
