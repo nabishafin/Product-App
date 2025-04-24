@@ -61,7 +61,7 @@ const Cart = ({ cartItems }) => {
                   <button onClick={() => handleDecrease(item)} className=" ">
                     <FaMinus />
                   </button>
-                  <span className="text-center w-full sm:w-12 border border-gray-300 py-2 rounded ">
+                  <span className="text-center w-12 md:w-full border border-gray-300 py-2 rounded ">
                     {item.quantity}
                   </span>
                   <button onClick={() => handleIncrease(item)} className=" ">
