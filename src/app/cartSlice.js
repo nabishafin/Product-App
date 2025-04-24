@@ -19,7 +19,10 @@ const cartSlice = createSlice({
             : item
         );
       } else {
-        state.cartItems.push({ ...action.payload, quantity: 1 });
+        state.cartItems.push({
+          ...action.payload,
+          quantity: action?.payload?.quantity || 1,
+        });
       }
     },
     removeFromCart: (state, action) => {
@@ -30,7 +33,6 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.cartItems = [];
     },
-
 
     updateCartItem: (state, action) => {
       const { id, quantity } = action.payload;

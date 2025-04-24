@@ -5,6 +5,7 @@ import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
 import Loader from "../components/Loader";
 import Header from "../components/Header";
+import ErrorComponent from "../components/ErrorComponent";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -37,16 +38,11 @@ const Home = () => {
   if (loading) return <Loader />;
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="text-red-500">Error: {error.message}</div>
-      </div>
-    );
+    return <ErrorComponent message={error?.message} />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between gap-4 items-center mb-8">
           <input

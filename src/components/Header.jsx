@@ -10,7 +10,10 @@ const Header = () => {
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-2xl sm:text-3xl font-bold text-blue-600 tracking-wide">
+        <Link
+          to="/"
+          className="text-2xl sm:text-3xl font-bold text-blue-600 tracking-wide"
+        >
           ProductHub
         </Link>
 
@@ -18,18 +21,19 @@ const Header = () => {
         <nav className="hidden sm:flex ">
           <ul className="flex space-x-6 items-center text-gray-700 font-medium">
             <li>
-              <Link to="/" className="hover:text-blue-600 transition duration-300">
+              <Link
+                to="/"
+                className="hover:text-blue-600 transition duration-300"
+              >
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/products" className="hover:text-blue-600 transition duration-300">
+              <Link
+                to="/"
+                className="hover:text-blue-600 transition duration-300"
+              >
                 Products
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="hover:text-blue-600 transition duration-300">
-                Contact
               </Link>
             </li>
           </ul>
@@ -53,4 +57,3 @@ const Header = () => {
 };
 
 export default Header;
-
