@@ -6,7 +6,7 @@ import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 import CartPage from "./pages/CartPage";
 import { Toaster } from "react-hot-toast"; // make sure you import this
-import Checkout from "./pages/checkout";
+import Checkout from "./pages/Checkout";
 import Header from "./components/Header";
 import React, { useEffect } from "react";
 
