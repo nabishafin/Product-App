@@ -4,6 +4,7 @@ import { setProducts } from "../app/productSlice";
 import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
 import Loader from "../components/Loader";
+import Header from "../components/Header";
 import ErrorComponent from "../components/ErrorComponent";
 
 const Home = () => {
