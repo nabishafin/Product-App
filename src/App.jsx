@@ -5,10 +5,12 @@ import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 import CartPage from "./pages/CartPage";
-import { Toaster } from "react-hot-toast"; // make sure you import this
-import Checkout from "./pages/checkout";
+import { Toaster } from "react-hot-toast";
+
 import Header from "./components/Header";
 import React, { useEffect } from "react";
+
+import CheckoutPage from "./pages/checkout";
 
 function App() {
   const { cartItems } = useSelector((state) => state.cart);
@@ -24,11 +26,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
     </>
   );
 }
