@@ -1,12 +1,28 @@
-# React + Vite
+This is a responsive product showcase web application built with **React.js**, **Redux Toolkit**, **Axios**, and **Tailwind CSS**. The app fetches product data from a given API and displays it in a user-friendly layout. It includes optional functionality for placing orders.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🔧 Tech Stack
 
-Currently, two official plugins are available:
+- React.js
+- Redux Toolkit
+- Axios
+- Tailwind CSS
+- React Router DOM
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📦 Features
+- Fetch products using **Axios** from:
+  `https://admin.refabry.com/api/all/product/get`
+- Display all products with a responsive layout.
+- Display single product with a responsive layout.
+- Add to cart feature.
+- Modify cart feature.
+- Cart persist feature on reload.
+- Place order to server .
+- Customer information form validation.
+- Dynamic routing for single product detail view.
+- Product image URL format:  
+  `https://admin.refabry.com/storage/product/{image_name}`
+- Clean, modern UI built with **Tailwind CSS**.
+- Optimized performance and structured using **Redux Toolkit**.
+  
