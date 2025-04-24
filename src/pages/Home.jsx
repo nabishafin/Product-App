@@ -10,6 +10,7 @@ import ErrorComponent from "../components/ErrorComponent";
 const Home = () => {
   const dispatch = useDispatch();
   const { items: products } = useSelector((state) => state.products);
+
   const { data, loading, error } = useProducts();
 
   const [searchTerm, setSearchTerm] = useState("");
